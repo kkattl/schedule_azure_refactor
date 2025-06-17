@@ -1,0 +1,51 @@
+########################################
+# Terraform & Terragrunt
+########################################
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+terraform.tfvars
+*.auto.tfvars
+*.secret.tfvars
+dev/*.tfvars           
+.terraform.lock.hcl
+
+########################################
+# OS / редактори / IDE
+########################################
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+# Vim / Neovim
+*.swp
+*.swo
+# VS Code
+.vscode/
+history/
+# JetBrains IDE (IntelliJ IDEA, PyCharm тощо)
+.idea/
+
+
+__pycache__/
+*.py[cod]
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+*.log
+*.zip
+*.tar.gz
+*.tmp
+*~
+
+
+*.tfplan.json
+
+graph.png
