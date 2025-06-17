@@ -12,24 +12,24 @@ module "vm_proxy" {
   source  = "kumarvna/virtual-machine/azurerm"
   version = "~> 2.3.0"
 
-  name                = "${var.prefix}-proxy"
+  vm_hostname         = "${var.prefix}-proxy"
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  subnet_id          = module.network.vnet_subnets[0] 
-  allocate_public_ip = true
-  admin_username     = var.admin_username
-  ssh_public_key     = var.ssh_public_key
+  vnet_subnet_id      = module.network.vnet_subnets[0]
+  public_ip_dns       = "${var.prefix}-proxy"
+  admin_username      = var.admin_username
+  admin_ssh_public_key = var.ssh_public_key
 
   vm_size = var.proxy_vm_size
-  image = {
+  source_image_reference = {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
     sku       = var.ubuntu_sku
     version   = "latest"
   }
 
-  nsg_id = module.nsg_public.network_security_group_id
+  nsg_ids = [module.nsg_public.network_security_group_id]
 }
 
 
@@ -37,17 +37,17 @@ module "vm_backend" {
   source  = "kumarvna/virtual-machine/azurerm"
   version = "~> 2.3.0"
 
-  name                = "${var.prefix}-backend"
+  vm_hostname         = "${var.prefix}-backend"
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  subnet_id           = module.network.vnet_subnets[1] 
-  allocate_public_ip  = false
+  vnet_subnet_id      = module.network.vnet_subnets[1]
+  public_ip_dns       = null
   admin_username      = var.admin_username
-  ssh_public_key      = var.ssh_public_key
+  admin_ssh_public_key = var.ssh_public_key
   vm_size             = "Standard_B1s"
-  image               = local.image
-  nsg_id              = module.nsg_private.network_security_group_id
+  source_image_reference = local.image
+  nsg_ids             = [module.nsg_private.network_security_group_id]
 }
 
 
@@ -55,17 +55,17 @@ module "vm_frontend" {
   source  = "kumarvna/virtual-machine/azurerm"
   version = "~> 2.3.0"
 
-  name                = "${var.prefix}-frontend"
+  vm_hostname         = "${var.prefix}-frontend"
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  subnet_id           = module.network.vnet_subnets[1]  
-  allocate_public_ip  = false
+  vnet_subnet_id      = module.network.vnet_subnets[1]
+  public_ip_dns       = null
   admin_username      = var.admin_username
-  ssh_public_key      = var.ssh_public_key
+  admin_ssh_public_key = var.ssh_public_key
   vm_size             = "Standard_B1s"
-  image               = local.image
-  nsg_id              = module.nsg_private.network_security_group_id
+  source_image_reference = local.image
+  nsg_ids             = [module.nsg_private.network_security_group_id]
 }
 
 
@@ -73,15 +73,15 @@ module "vm_bastion" {
   source  = "kumarvna/virtual-machine/azurerm"
   version = "~> 2.3.0"
 
-  name                = "${var.prefix}-bastion-vm"
+  vm_hostname         = "${var.prefix}-bastion-vm"
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  subnet_id           = module.network.vnet_subnets[2]  
-  allocate_public_ip  = false   
+  vnet_subnet_id      = module.network.vnet_subnets[2]
+  public_ip_dns       = null
   admin_username      = var.admin_username
-  ssh_public_key      = var.ssh_public_key
+  admin_ssh_public_key = var.ssh_public_key
   vm_size             = "Standard_B1ms"
-  image               = local.image
-  nsg_id              = module.nsg_private.network_security_group_id
+  source_image_reference = local.image
+  nsg_ids             = [module.nsg_private.network_security_group_id]
 }

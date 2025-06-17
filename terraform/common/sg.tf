@@ -4,7 +4,7 @@ module "nsg_public" {
 
   resource_group_name = var.resource_group_name
   location            = var.location
-  name                = "${var.prefix}-public-nsg"
+  security_group_name = "${var.prefix}-public-nsg"
 
   custom_rules = [
     for idx, port in var.proxy_allowed_ports : {
